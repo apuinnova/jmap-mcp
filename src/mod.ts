@@ -88,14 +88,7 @@ Works with any JMAP-compliant email server including Cyrus IMAP, Stalwart Mail S
   const account = session.accounts[accountId];
 
   if ("urn:ietf:params:jmap:mail" in session.capabilities) {
-    registerEmailTools(
-      server,
-      jam,
-      accountId,
-      account.isReadOnly,
-      getJMAPConfig,
-      createJAMClient,
-    );
+    registerEmailTools(server, jam, accountId, account.isReadOnly);
     console.warn("Registered urn:ietf:params:jmap:mail tools");
 
     if (

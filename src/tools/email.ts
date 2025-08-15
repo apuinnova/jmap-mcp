@@ -1,7 +1,14 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import type JamClient from "jmap-jam";
-import type { EmailFilterCondition } from "jmap-jam";
+import type {
+  Email,
+  EmailCreate,
+  EmailFilterCondition,
+  FilterCondition,
+  GetEmailArguments,
+  MailboxFilterCondition,
+} from "jmap-jam";
 import { formatError } from "../utils.ts";
 
 export const SearchEmailsSchema = z.object({
@@ -57,8 +64,37 @@ export const GetEmailsSchema = z.object({
   ids: z.array(z.string()).min(1).max(50).describe(
     "Array of email IDs to retrieve",
   ),
-  properties: z.array(z.string()).optional().describe(
-    "Specific properties to return (default: all)",
+  properties: z.array(z.enum(
+    [
+      "id",
+      "blobId",
+      "threadId",
+      "mailboxIds",
+      "keywords",
+      "size",
+      "receivedAt",
+      "headers",
+      "messageId",
+      "inReplyTo",
+      "references",
+      "sender",
+      "from",
+      "to",
+      "cc",
+      "bcc",
+      "replyTo",
+      "subject",
+      "sentAt",
+      "bodyStructure",
+      "bodyValues",
+      "textBody",
+      "htmlBody",
+      "attachments",
+      "hasAttachment",
+      "preview",
+    ] as const satisfies Array<keyof Email>,
+  )).optional().describe(
+    "Specific Email properties to return (default: all).",
   ),
 });
 
@@ -141,14 +177,6 @@ export function registerEmailTools(
   jam: JamClient,
   accountId: string,
   isReadOnly: boolean,
-  getConfig: () => {
-    sessionUrl: string;
-    bearerToken: string;
-    accountId?: string;
-  },
-  createClient: (
-    config: { sessionUrl: string; bearerToken: string; accountId?: string },
-  ) => JamClient,
 ) {
   server.tool(
     "search_emails",
@@ -205,7 +233,7 @@ export function registerEmailTools(
     GetMailboxesSchema.shape,
     async (args) => {
       try {
-        let filter: Record<string, unknown> | undefined;
+        let filter: FilterCondition<MailboxFilterCondition> | undefined;
         if (args.parentId) {
           filter = { parentId: args.parentId };
         }
@@ -260,21 +288,13 @@ export function registerEmailTools(
     GetEmailsSchema.shape,
     async (args) => {
       try {
-        const config = getConfig();
-        const jam = createClient(config);
-        const accountId = config.accountId || await jam.getPrimaryAccount();
-
-        const [result] = await jam.api.Email.get({
-          accountId,
-          ids: args.ids,
-          properties: args.properties as
-            | readonly (
-              | keyof import("jmap-jam").Email
-              | import("jmap-jam").HeaderFieldKey
-            )[]
-            | null
-            | undefined,
-        });
+        const [result] = await jam.api.Email.get(
+          {
+            accountId,
+            ids: args.ids,
+            properties: args.properties,
+          } satisfies GetEmailArguments,
+        );
 
         return {
           content: [
@@ -350,11 +370,7 @@ export function registerEmailTools(
       MarkEmailsSchema.shape,
       async (args) => {
         try {
-          const config = getConfig();
-          const jam = createClient(config);
-          const accountId = config.accountId || await jam.getPrimaryAccount();
-
-          const updates: Record<string, Record<string, unknown>> = {};
+          const updates: Record<string, EmailCreate> = {};
 
           for (const id of args.ids) {
             const keywords: Record<string, boolean> = {};
@@ -408,7 +424,7 @@ export function registerEmailTools(
       MoveEmailsSchema.shape,
       async (args) => {
         try {
-          const updates: Record<string, Record<string, unknown>> = {};
+          const updates: Record<string, EmailCreate> = {};
 
           for (const id of args.ids) {
             updates[id] = {
