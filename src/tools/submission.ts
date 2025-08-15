@@ -1,6 +1,7 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import type JamClient from "jmap-jam";
+import type { EmailCreate } from "jmap-jam";
 
 import { formatError } from "../utils.ts";
 
@@ -72,7 +73,8 @@ export function registerEmailSubmissionTools(
               },
             }),
           },
-        };
+          attachments: [],
+        } satisfies EmailCreate;
 
         const [emailResult] = await jam.api.Email.set({
           accountId,
